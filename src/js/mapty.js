@@ -23,7 +23,7 @@ class App{
   #currentMapEvent;
 
   constructor(){
-    this.reset();
+    // this.reset();
     this.#getPosition();
     this.#getLocalStorage();
     inputForm.addEventListener('submit', this.#newWorkout.bind(this));
