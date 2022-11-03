@@ -1,0 +1,21 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+*::after, *::before{
+    box-sizing: inherit;
+}
+
+html{
+    font-size: 0.625rem;
+}
+
+input:focus{
+    outline: none;
+}
+
+input, select{
+    font-family: inherit;
+}

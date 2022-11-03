@@ -1,0 +1,36 @@
+@use '../1-base/variables' as var;
+
+.workout {
+  &__form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.15rem 2.5rem;
+    padding: 1.2rem 2.75rem;
+    transition: all 0.5s, transform 1ms ease-in-out;
+  }
+
+  &__group {
+    display: flex;
+    align-items: center;
+  }
+
+  &__label {
+    flex-basis: 50%;
+    font-weight: 600;
+    font-size: 1.5rem;
+  }
+
+  &__input, &__select {
+    background-color: var.$color-light--3;
+    width: 50%;
+    font-size: 1.4rem;
+    font-family: inherit;
+    border: none;
+    padding: 3px 12px;
+    border-radius: 3px;
+
+    &:focus{
+      background-color: var.$color-light--2;
+    }
+  }
+}

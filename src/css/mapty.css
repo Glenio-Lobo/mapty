@@ -1,0 +1,173 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+*::after, *::before {
+  box-sizing: inherit;
+}
+
+html {
+  font-size: 0.625rem;
+}
+
+input:focus {
+  outline: none;
+}
+
+input, select {
+  font-family: inherit;
+}
+
+.main {
+  height: 100vh;
+  display: flex;
+  padding: 2.5rem;
+  font-family: "Manrope", sans-serif;
+  color: #ececec;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  background-color: #2d3439;
+  max-width: 50rem;
+  padding: 3rem 5rem;
+}
+
+.logo {
+  height: 5.2rem;
+  align-self: center;
+}
+
+.workout {
+  height: 80%;
+  margin-top: 4rem;
+  overflow-y: scroll;
+}
+.workout::-webkit-scrollbar {
+  width: 0;
+}
+
+.copyright {
+  text-align: center;
+  color: #aaa;
+  line-height: 1.5;
+  font-size: 1.3rem;
+}
+
+.map {
+  flex: 1;
+  height: 100%;
+}
+
+.btn {
+  display: none;
+}
+
+.workout__item {
+  background-color: #42484d;
+  height: 22%;
+  margin-bottom: 1.5rem;
+  border-radius: 0.4rem;
+}
+.workout__card {
+  padding: 1.75rem 2.75rem;
+}
+.workout__card:hover {
+  cursor: pointer;
+}
+.workout__title {
+  font-size: 1.7rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+.workout__data {
+  display: flex;
+  justify-content: space-between;
+}
+.workout__info {
+  font-size: 1.5rem;
+}
+.workout__info__unit {
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  color: #aaa;
+  font-weight: bold;
+}
+.workout__card--cycling {
+  border-left: 4px solid #ffb545;
+}
+.workout__card--running {
+  border-left: 4px solid #00c46a;
+}
+
+.workout__form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.15rem 2.5rem;
+  padding: 1.2rem 2.75rem;
+  transition: all 0.5s, transform 1ms ease-in-out;
+}
+.workout__group {
+  display: flex;
+  align-items: center;
+}
+.workout__label {
+  flex-basis: 50%;
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+.workout__input, .workout__select {
+  background-color: rgb(214, 222, 224);
+  width: 50%;
+  font-size: 1.4rem;
+  font-family: inherit;
+  border: none;
+  padding: 3px 12px;
+  border-radius: 3px;
+}
+.workout__input:focus, .workout__select:focus {
+  background-color: #ececec;
+}
+
+.hidden {
+  display: none;
+}
+
+.workout__form.hidden {
+  display: block;
+  height: 0;
+  transform: translateY(-30rem);
+  padding: 0 2.75rem;
+  margin-bottom: 0;
+  opacity: 0;
+}
+
+.leaflet-popup .leaflet-popup-content-wrapper, .leaflet-popup .leaflet-popup-tip {
+  background-color: #2d3439;
+}
+
+.leaflet-popup .leaflet-popup-content-wrapper, .leaflet-popup .leaflet-popup-close-button span {
+  color: #ececec;
+}
+
+.leaflet-popup .leaflet-popup-content-wrapper {
+  border-radius: 5px;
+  padding: 0.4rem;
+}
+
+.leaflet-popup .leaflet-popup-content {
+  font-size: 1.5rem;
+}
+
+.popup--cycling .leaflet-popup-content-wrapper {
+  border-left: 5px solid #ffb545;
+}
+
+.popup--running .leaflet-popup-content-wrapper {
+  border-left: 5px solid #00c46a;
+}
+
+/*# sourceMappingURL=mapty.css.map */

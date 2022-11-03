@@ -1,0 +1,8 @@
+@use '../1-base/variables' as var;
+
+.copyright{
+    text-align: center;
+    color: var.$color-light--1;
+    line-height: 1.5;
+    font-size: 1.3rem;
+}

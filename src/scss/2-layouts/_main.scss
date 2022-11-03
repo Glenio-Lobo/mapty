@@ -1,0 +1,9 @@
+@use '../1-base/variables' as var;
+
+.main{
+    height: 100vh;
+    display: flex;
+    padding: 2.5rem;
+    font-family: 'Manrope', sans-serif;
+    color: var.$color-light--2;
+}

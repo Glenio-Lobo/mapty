@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapty Project</title>
+    <link rel="shortcut icon" href='./src/img/icon.png' type="image/x-icon">
+    <link rel="stylesheet" href="./src/css/mapty.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Scripts -->
+    <!-- leaflet: Mapas Otimizados -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.1/dist/leaflet.css" integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14=" crossorigin="" />
+    <script DEFER src="https://unpkg.com/leaflet@1.9.1/dist/leaflet.js" integrity="sha256-NDI0K41gVbWqfkkaHj15IzU7PtMoelkzyKp8TOaFQ3s=" crossorigin=""></script>
+
+    <script DEFER type="module" src="./src/js/mapty.js"></script>
+</head>
+<body>
+    <main class="main" id="main">
+        <section class="sidebar">
+            <img src="./src/img/logo.png" alt="Logo da Mapty" loading='lazy' class="logo">
+
+            <div class="workout">
+                <form class="workout__item workout__form hidden">
+                    <div class="workout__group">
+                        <label for="formSelect" class="workout__label">Type</label>
+                        <select name="formSelect" id='formSelect' class='workout__select'>
+                            <option value="running" class="workout__option">Running</option>
+                            <option value="cycling" class="workout__option">Cycling</option>
+                        </select>
+                    </div>
+    
+                    <div class="workout__group">
+                        <label for="distance" class="workout__label">Distance</label>
+                        <input 
+                            name="distance" 
+                            id="distance" class='workout__input workout__input--distance'
+                            placeholder="km"
+                        />
+                    </div>
+
+                    <div class="workout__group">
+                        <label for="duration" class="workout__label">Duration</label>
+                        <input 
+                            name="duration" 
+                            id="duration" class='workout__input workout__input--duration'
+                            placeholder="min"
+                        />
+                    </div>
+    
+                    <div class="workout__group">
+                        <label for="cadence" class="workout__label">Cadence</label>
+                        <input 
+                            name="cadence" 
+                            id="cadence" class='workout__input workout__input--cadence'
+                            placeholder="step/min"
+                        />
+                    </div>
+    
+                    <div class="workout__group hidden">
+                        <label for="gain" class="workout__label">Elev Gain</label>
+                        <input 
+                            name="gain" 
+                            id="gain" class='workout__input workout__input--gain'
+                            placeholder="meters"
+                        />
+                    </div>
+
+                    <button class="btn workout__btn">OK</button>
+                </form>
+
+                <!-- <div class="workout__item workout__card workout__card--cycling">
+                    <h1 class="workout__title">
+                        Cycling on 
+                        <span class="workout__title__date">September 30</span>
+                    </h1>
+
+                    <div class="workout__data">
+                        <div class="workout__info">
+                            <span class="workout__info__icon">🚴‍♀️</span>
+                            <span class="workout__info__value">4</span>
+                            <span class="workout__info__unit">km</span>
+                        </div>
+
+                        <div class="workout__info">
+                            <span class="workout__info__icon">⏱</span>
+                            <span class="workout__info__value">2</span>
+                            <span class="workout__info__unit">min</span>
+                        </div>
+
+                        <div class="workout__info">
+                            <span class="workout__info__icon">⚡️</span>
+                            <span class="workout__info__value">60.0</span>
+                            <span class="workout__info__unit">km/h</span>
+                        </div>
+
+                        <div class="workout__info">
+                            <span class="workout__info__icon">⛰</span>
+                            <span class="workout__info__value">2</span>
+                            <span class="workout__info__unit">m</span>
+                        </div>
+                    </div>
+                </div> -->
+
+
+                <!-- <div class="workout__item workout__card workout__card--running">
+                    <h1 class="workout__title">
+                        Running on 
+                        <span class="workout__title__date">September 30</span>
+                    </h1>
+
+                    <div class="workout__data">
+                        <div class="workout__info">
+                            <span class="workout__info__icon">🏃‍♂️</span>
+                            <span class="workout__info__value">4</span>
+                            <span class="workout__info__unit">km</span>
+                        </div>
+    
+                        <div class="workout__info">
+                            <span class="workout__info__icon">⏱</span>
+                            <span class="workout__info__value">4</span>
+                            <span class="workout__info__unit">min</span>
+                        </div>
+    
+                        <div class="workout__info">
+                            <span class="workout__info__icon">⚡️</span>
+                            <span class="workout__info__value">60.0</span>
+                            <span class="workout__info__unit">min/km</span>
+                        </div>
+    
+                        <div class="workout__info">
+                            <span class="workout__info__icon">🦶🏼</span>
+                            <span class="workout__info__value">4</span>
+                            <span class="workout__info__unit">spm</span>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+
+            <div class="copyright">
+                &copy; Copyright by Jonas Schmedtmann. 
+                Use for learning or your portfolio. 
+                Don't use to teach. Don't claim as your own.
+            </div>
+        </section>
+
+        <section class="map" id="map"></section>
+    </main>
+</body>
+</html>

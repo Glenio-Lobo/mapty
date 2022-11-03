@@ -1,0 +1,12 @@
+.hidden {
+  display: none;
+}
+
+.workout__form.hidden {
+  display: block;
+  height: 0;
+  transform: translateY(-30rem);
+  padding: 0 2.75rem;
+  margin-bottom: 0;
+  opacity: 0;
+}
