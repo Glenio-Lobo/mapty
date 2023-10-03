@@ -4,6 +4,7 @@
   "description": "",
   "default": "index.html",
   "scripts": {
+    "doc": "jsdoc -p -c jsdoc.json",
     "start": "parcel index.html",
     "build": "parcel build index.html --dist-dir ./dist",
     "sass": "sass --watch src/scss/mapty.scss:src/css/mapty.css",
@@ -12,6 +13,7 @@
   "author": "globo",
   "license": "ISC",
   "devDependencies": {
+    "jsdoc": "^4.0.2",
     "parcel": "^2.7.0",
     "sass": "^1.55.0"
   },
