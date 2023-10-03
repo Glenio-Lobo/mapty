@@ -2,7 +2,16 @@
 
 .workout{
     
+    &__delete{
+        content: "";
+        position: absolute;
+        top: 1%;
+        right: 4%;
+        font-size: 2rem;
+    }
+    
     &__item{
+        position: relative;
         background-color: var.$color-dark--2;
         height: 22%;
         margin-bottom: 1.5rem;
@@ -11,6 +20,7 @@
 
     &__card{
         padding: 1.75rem 2.75rem;
+        min-height: 100px;
 
         &:hover{
             cursor: pointer;

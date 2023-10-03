@@ -24,12 +24,18 @@ const workoutContainer = document.querySelector('.workout');
 
 /** App Class */
 class App{
-  /** @property {Array<Workout>} - Represents all the workouts */
+  /** @property {Array<Workout>} workouts Represents all the workouts */
   #workouts = [];
-  /** @property {HTMLElement} - Leaflet map */
+
+  /** @property {HTMLElement} map Leaflet map */
   #map;
-  /** @property {MouseEvent} - Mouse Event of the Newest Marker*/
+
+  /** @property {MouseEvent} currentMapEvent Mouse Event of the Newest Marker*/
   #currentMapEvent;
+
+  /** @property {LayerGroup} markers Leaflet LayerGroup */
+  // @ts-ignore
+  #markers = L.layerGroup();
 
   /**
    * Creates an App
@@ -43,7 +49,7 @@ class App{
     // @ts-ignore
     selectionInput.addEventListener('change', this.#toggleElevationField);
     // @ts-ignore
-    workoutContainer.addEventListener('click', this.#moveToPopup.bind(this))
+    workoutContainer.addEventListener('click', this.#workoutContainerController.bind(this))
   }
 
   /** 
@@ -64,7 +70,7 @@ class App{
 
   /**
    * Load the map on the user position
-   * @property {Function}
+   * @property {Function} loadMap
    * @param {GeolocationPosition} position
    * @return {void}
    */
@@ -168,6 +174,7 @@ class App{
 
     // @ts-ignore
     const html = `<div class="workout__item workout__card workout__card--${workout.name}" data-id= "${workout.id}">
+                      <div class="workout__delete" data-id="${workout.id}">x</div>
                       <h1 class="workout__title">
                           ${workout.description}
                       </h1>
@@ -223,6 +230,39 @@ class App{
     inputForm.insertAdjacentHTML('afterend', html);
   }
 
+  #workoutContainerController(e){
+    if(!this.#map) return;
+
+    if(e.target.closest('.workout__card')) this.#moveToPopup(e.target.closest('.workout__card'));
+    if(e.target.closest('.workout__delete')) this.#deleteWorkout(e.target.closest('.workout__card'));
+  }
+
+  #deleteWorkout(workoutElement){
+    const workoutToDelete = this.#workouts.findIndex( (val, index) => {
+      return val.id === workoutElement.dataset.id;
+    });
+
+    // Deletes from the workout Array
+    this.#workouts.splice(workoutToDelete, 1);
+    // Removes from the page
+    workoutElement.remove();
+    // Removes from the local storage
+    this.#setLocalStorage();
+    //Removes marker
+    this.#removeMarker(workoutElement);
+  }
+
+  #removeMarker(workoutElement){
+    this.#markers.eachLayer( (layer) => {
+      if(layer.options.workoutId === workoutElement.dataset.id) {
+        layer.remove();
+        this.#markers.removeLayer(layer);
+        return;
+      };
+    });
+
+  }
+
   /**
    * Render the workout marker
    * @property {Function}
@@ -241,9 +281,11 @@ class App{
     };
 
     // @ts-ignore
-    let marker = L.marker(workout.coords);
+    let marker = L.marker(workout.coords, {workoutId: workout.id});
     // @ts-ignore
     marker.addTo(this.#map).bindPopup(L.popup(popupOptions)).openPopup();
+
+    this.#markers.addLayer(marker);    
   }
 
   /**
@@ -282,18 +324,15 @@ class App{
 
   /**
    * Moves the user to the popup linked to the clicked workout
-   * @param {Event} e 
+   * @param {HTMLElement} workoutElement 
    * @returns {void}
    */
-  #moveToPopup(e){
-    // @ts-ignore
-    const actualWorkout = e.target.closest('.workout__card');
-    
-    if(!this.#map) return;
-    if(!actualWorkout) return;
+  #moveToPopup(workoutElement){
 
+    //Find the workout
     const workoutTarget = this.#workouts.find( 
-      (val) => val.id === actualWorkout.dataset.id);
+      // @ts-ignore
+      (val) => val.id === workoutElement.dataset.id);
     
     
     this.#map.setView(workoutTarget.coords, 13, 
@@ -352,15 +391,17 @@ class Workout{
    * @param {Array<number>} coords - Leaflet Object LatLng
    */
   constructor(distance, duration, coords){
-    /** @property {number} */
+    /** 
+     * @property {number} id
+    */
     this.id = (Date.now() + '').slice(-10);
-    /** @property {Date} */
+    /** @property {Date} date */
     this.date = new Date();
-    /** @property {number} */
+    /** @property {number} distance */
     this.distance = distance; // km
-    /** @property {number} */
+    /** @property {number} duration */
     this.duration = duration; // min
-    /** @property {LatLng} */
+    /** @property {LatLng} coords Leaflet LatLng Object */
     this.coords = coords; // [lat, long]
   }
 
