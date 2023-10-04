@@ -65,6 +65,24 @@ input, select {
 .btn {
   display: none;
 }
+.btn--delete-all {
+  display: inline-block;
+  width: max-content;
+  font-family: inherit;
+  font-size: 1.5rem;
+  margin: 1rem auto;
+  padding: 0.8rem 1rem;
+  outline: none;
+  color: white;
+  background-color: #2d3439;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn--delete-all:hover {
+  background-color: rgba(231, 24, 24, 0.753);
+  text-transform: uppercase;
+  font-weight: 600;
+}
 
 .workout__delete {
   content: "";
@@ -82,7 +100,7 @@ input, select {
 }
 .workout__card {
   padding: 1.75rem 2.75rem;
-  min-height: 100px;
+  min-height: 10rem;
 }
 .workout__card:hover {
   cursor: pointer;
@@ -118,6 +136,7 @@ input, select {
   gap: 0.15rem 2.5rem;
   padding: 1.2rem 2.75rem;
   transition: all 0.5s, transform 1ms ease-in-out;
+  height: 10rem;
 }
 .workout__group {
   display: flex;

@@ -7,10 +7,12 @@ import 'core-js/stable';
 // @ts-ignore
 import 'regenerator-runtime/runtime';
 // @ts-ignore
+// @ts-ignore
 import { async } from 'regenerator-runtime';
 
 //Prettier-Ignore faz com que a formatação automática do prettier ignore a linha seguinte
 // prettier-ignore
+// @ts-ignore
 // @ts-ignore
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
@@ -21,6 +23,7 @@ const cadenceInput = document.querySelector('.workout__input--cadence');
 const gainInput = document.querySelector('.workout__input--gain');
 const selectionInput = document.querySelector('.workout__select');
 const workoutContainer = document.querySelector('.workout');
+const deleteAllBtn = document.querySelector('.btn--delete-all');
 
 /** App Class */
 class App{
@@ -44,12 +47,11 @@ class App{
     // this.reset();
     this.#getPosition();
     this.#getLocalStorage();
-    // @ts-ignore
-    inputForm.addEventListener('submit', this.#newWorkout.bind(this));
-    // @ts-ignore
-    selectionInput.addEventListener('change', this.#toggleElevationField);
-    // @ts-ignore
-    workoutContainer.addEventListener('click', this.#workoutContainerController.bind(this))
+
+    inputForm?.addEventListener('submit', this.#newWorkout.bind(this));
+    selectionInput?.addEventListener('change', this.#toggleElevationField);
+    workoutContainer?.addEventListener('click', this.#workoutContainerController.bind(this))
+    deleteAllBtn?.addEventListener('click', this.#deleteAllWorkouts.bind(this));
   }
 
   /** 
@@ -81,6 +83,7 @@ class App{
     // @ts-ignore
     this.#map = L.map('map').setView([latitude, longitude], 13);
 
+    // @ts-ignore
     // @ts-ignore
     const hotTileLayer = L.tileLayer(
       'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
@@ -230,14 +233,27 @@ class App{
     inputForm.insertAdjacentHTML('afterend', html);
   }
 
+  /**
+   * Controls the workout container events
+   * @param {Event} e 
+   * @returns {void}
+   */
   #workoutContainerController(e){
-    if(!this.#map) return;
+    if(!this.#map || !e || !e.target) return;
 
+    // @ts-ignore
     if(e.target.closest('.workout__card')) this.#moveToPopup(e.target.closest('.workout__card'));
+    // @ts-ignore
     if(e.target.closest('.workout__delete')) this.#deleteWorkout(e.target.closest('.workout__card'));
   }
-
+  
+  /**
+   * Deletes a workout
+   * @param {HTMLElement} workoutElement Workout Element Rendered on Page
+   * @returns {void}
+   */
   #deleteWorkout(workoutElement){
+    // @ts-ignore
     const workoutToDelete = this.#workouts.findIndex( (val, index) => {
       return val.id === workoutElement.dataset.id;
     });
@@ -252,6 +268,37 @@ class App{
     this.#removeMarker(workoutElement);
   }
 
+  /**
+   * Deletes All Workouts
+   * @param {Event} e
+   * @returns {void}
+   */
+  #deleteAllWorkouts(e){
+    //Deleting from page
+    this.#workouts.forEach( (val, index) => {
+      const workoutToDelete = document.querySelector(`.workout__item[data-id="${val.id}"]`)
+
+      // @ts-ignore
+      if(workoutToDelete) workoutToDelete.remove();
+    })
+    //Deleting all markers from map
+    this.#markers.eachLayer( layer => layer.remove());
+
+    //Deleting all workouts from array
+    this.#workouts.splice(0, this.#workouts.length);
+
+    //Deleting all markers
+    this.#markers.clearLayers();
+
+    //Reseting local storage
+    this.reset();
+  }
+
+  /**
+   * Remove the marker linked to the workout from the map
+   * @param {HTMLElement} workoutElement Workout Element Rendered on Page
+   * @returns {void}
+   */
   #removeMarker(workoutElement){
     this.#markers.eachLayer( (layer) => {
       if(layer.options.workoutId === workoutElement.dataset.id) {
@@ -363,12 +410,15 @@ class App{
 
     if(!stored) return;
 
-    this.#workouts = stored;
-
-    this.#workouts.forEach( workout => {
-      this.#renderWorkout(workout);
-      // this.#renderWorkoutMarker(workout);
-    })
+    // Rebuilding Cycling and Running Objects
+    stored.forEach( workout => {
+        const workoutGenerated = workout.name === 'running' ? 
+                                new Running(workout.distance, workout.duration, workout.coords, workout.cadence)
+                                : new Cycling(workout.distance, workout.duration, workout.coords, workout.gain);
+        this.#workouts.push(workoutGenerated);
+        this.#renderWorkout(workoutGenerated);
+      }   
+    );
   }
 
   /**
@@ -486,7 +536,6 @@ class Cycling extends Workout{
 }
 
 /** [See App Class]{@link App} */
-// @ts-ignore
 const app = new App();
 
 // function formatDateString(date){
