@@ -1,0 +1,16 @@
+.error {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba($color: #eb5d5db9, $alpha: 1.0);
+    padding: 2rem 3rem;
+    font-size: 2rem;
+    font-weight: 600;
+    border-radius: 5px;
+    z-index: 10000;
+    opacity: 1;
+    visibility: visible;
+    transition: all .5s ease-in-out;
+
+}

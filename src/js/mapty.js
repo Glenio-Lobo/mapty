@@ -7,15 +7,13 @@ import 'core-js/stable';
 // @ts-ignore
 import 'regenerator-runtime/runtime';
 // @ts-ignore
-// @ts-ignore
 import { async } from 'regenerator-runtime';
 
 //Prettier-Ignore faz com que a formatação automática do prettier ignore a linha seguinte
 // prettier-ignore
-// @ts-ignore
-// @ts-ignore
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
+const main = document.querySelector('.main');
 const inputForm = document.querySelector('.workout__form');
 const distanceInput = document.querySelector('.workout__input--distance');
 const durationInput = document.querySelector('.workout__input--duration');
@@ -24,6 +22,7 @@ const gainInput = document.querySelector('.workout__input--gain');
 const selectionInput = document.querySelector('.workout__select');
 const workoutContainer = document.querySelector('.workout');
 const deleteAllBtn = document.querySelector('.btn--delete-all');
+const showAllWorkoutsBtn = document.querySelector('.btn--show-all');
 
 /** App Class */
 class App{
@@ -52,6 +51,7 @@ class App{
     selectionInput?.addEventListener('change', this.#toggleElevationField);
     workoutContainer?.addEventListener('click', this.#workoutContainerController.bind(this))
     deleteAllBtn?.addEventListener('click', this.#deleteAllWorkouts.bind(this));
+    showAllWorkoutsBtn?.addEventListener('click', this.#showAllWorkouts.bind(this));
   }
 
   /** 
@@ -64,7 +64,7 @@ class App{
       navigator.geolocation.getCurrentPosition(
         this.#loadMap.bind(this), //Sucesso
         () => { //Caso falhe.
-          alert('Não foi possível obter sua localização.');
+          new Error('Não foi possível obter sua localização.').renderErrorMessage();
         }
       );
     }
@@ -137,7 +137,7 @@ class App{
       const cadence = Number(cadenceInput.value);
 
       //Validação das entradas
-      if(!isNumberAndPositive(distance, duration, cadence)) return alert('Input must be a positive number.');
+      if(!isNumberAndPositive(distance, duration, cadence)) return new Error('Input must be a positive number.').renderErrorMessage();
       workout = new Running(distance, duration, this.#currentMapEvent.latlng, cadence);
     }
     
@@ -147,7 +147,7 @@ class App{
       const gain = Number(gainInput.value);
 
       //Validação das entradas
-      if(!isNumberAndPositive(distance, duration, gain)) return alert('Input must be a positive number.');
+      if(!isNumberAndPositive(distance, duration, gain)) return new Error('Input must be a positive number.').renderErrorMessage();
       workout = new Cycling(distance, duration, this.#currentMapEvent.latlng, gain);
     }
 
@@ -355,8 +355,18 @@ class App{
   }
 
   /**
+   * Shows All Workout Markers on the map
+   * @param {Event} e 
+   */
+  #showAllWorkouts(e){
+    // @ts-ignore
+    const workoutFeatureGroup = L.featureGroup(this.#markers.getLayers());
+    this.#map.fitBounds(workoutFeatureGroup.getBounds().pad(.2));
+  }
+
+  /**
    * Hides the markout form
-   * @property {Function}
+   * @property {Function} hideform
    */
   #hideForm(){
     // @ts-ignore
@@ -413,8 +423,8 @@ class App{
     // Rebuilding Cycling and Running Objects
     stored.forEach( workout => {
         const workoutGenerated = workout.name === 'running' ? 
-                                new Running(workout.distance, workout.duration, workout.coords, workout.cadence)
-                                : new Cycling(workout.distance, workout.duration, workout.coords, workout.gain);
+                                new Running(workout.distance, workout.duration, workout.coords, workout.cadence, new Date(workout.date))
+                                : new Cycling(workout.distance, workout.duration, workout.coords, workout.gain, new Date(workout.date));
         this.#workouts.push(workoutGenerated);
         this.#renderWorkout(workoutGenerated);
       }   
@@ -438,15 +448,16 @@ class Workout{
    * Creates a new workout object
    * @param {number} distance 
    * @param {number} duration 
-   * @param {Array<number>} coords - Leaflet Object LatLng
+   * @param {Array<number>} coords Leaflet Object LatLng
+   * @param {Date} [date=new Date()] 
    */
-  constructor(distance, duration, coords){
+  constructor(distance, duration, coords, date = new Date()){
     /** 
      * @property {number} id
     */
     this.id = (Date.now() + '').slice(-10);
     /** @property {Date} date */
-    this.date = new Date();
+    this.date = date;
     /** @property {number} distance */
     this.distance = distance; // km
     /** @property {number} duration */
@@ -485,9 +496,10 @@ class Running extends Workout{
    * @param {number} duration 
    * @param {Array<number>} coords - Leaflet Object LatLng
    * @param {number} cadence
+   * @param {Date} [date=new Date()] 
    */
-  constructor(distance, duration, coords, cadence){
-    super(distance, duration, coords);
+  constructor(distance, duration, coords, cadence, date=new Date()){
+    super(distance, duration, coords, date);
     this.cadence = cadence;
     this.#calcPace();
     this.setDescription();
@@ -517,9 +529,10 @@ class Cycling extends Workout{
    * @param {number} duration 
    * @param {Array<number>} coords - Leaflet Object LatLng
    * @param {number} gain
+   * @param {Date} [date=new Date()] 
    */
-  constructor(distance, duration, coords, gain){
-    super(distance, duration, coords);
+  constructor(distance, duration, coords, gain, date = new Date()){
+    super(distance, duration, coords, date);
     this.gain = gain;
     this.#calcSpeed();
     this.setDescription();
@@ -535,6 +548,49 @@ class Cycling extends Workout{
   }
 }
 
+/** Error Class */
+class Error {
+  /**
+   * Build a error object
+   * @param {string} errorMessage 
+   */
+  constructor(errorMessage){
+    this.errorMessage = errorMessage;
+  }
+
+  /**
+   * Renders error message on the workout container
+   */
+  renderErrorMessage(){
+
+    // Se já existir um erro renderizado retorne
+    if(main?.querySelector('.error')) return;
+    
+    // Gera o erro
+    const html = `<div class="error">${this.errorMessage}</div>`;
+    main?.insertAdjacentHTML('afterbegin', html);
+    const errorElement = main?.querySelector('.error');
+
+    setTimeout( () => {
+      //@ts-ignore
+      errorElement.style.opacity = 0;
+      //@ts-ignore
+      errorElement.style.visibility = 'hidden';
+    }, 2000);
+
+    setTimeout( () => {
+      errorElement?.remove();
+    }, 2500);
+  }
+
+  /**
+   * Sets the error message
+   * @param {string} errorMessage 
+   */
+  setErrorMessage(errorMessage){
+    this.errorMessage = errorMessage;
+  }
+}
 /** [See App Class]{@link App} */
 const app = new App();
 

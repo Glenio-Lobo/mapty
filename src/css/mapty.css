@@ -60,28 +60,44 @@ input, select {
 .map {
   flex: 1;
   height: 100%;
+  position: relative;
 }
 
 .btn {
+  width: max-content;
+  font-family: inherit;
+  font-size: 1.5rem;
+  padding: 0.8rem 1rem;
+  outline: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn--workout {
   display: none;
 }
 .btn--delete-all {
   display: inline-block;
-  width: max-content;
-  font-family: inherit;
-  font-size: 1.5rem;
   margin: 1rem auto;
-  padding: 0.8rem 1rem;
-  outline: none;
-  color: white;
   background-color: #2d3439;
-  cursor: pointer;
-  transition: all 0.2s;
 }
 .btn--delete-all:hover {
   background-color: rgba(231, 24, 24, 0.753);
   text-transform: uppercase;
   font-weight: 600;
+}
+.btn--show-all {
+  position: absolute;
+  top: 10px;
+  right: 2%;
+  display: inline-block;
+  border-radius: 3px;
+  background-color: #2d3439;
+  z-index: 1000;
+}
+.btn--show-all:hover {
+  background-color: rgba(66, 72, 77, 0.5);
 }
 
 .workout__delete {
@@ -196,6 +212,22 @@ input, select {
 
 .popup--running .leaflet-popup-content-wrapper {
   border-left: 5px solid #00c46a;
+}
+
+.error {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #eb5d5d;
+  padding: 2rem 3rem;
+  font-size: 2rem;
+  font-weight: 600;
+  border-radius: 5px;
+  z-index: 10000;
+  opacity: 1;
+  visibility: visible;
+  transition: all 0.5s ease-in-out;
 }
 
 /*# sourceMappingURL=mapty.css.map */

@@ -1,25 +1,44 @@
 @use '../1-base/variables' as var;
 
 .btn{
-    display: none;
-
+    width: max-content;
+    font-family: inherit;
+    font-size: 1.5rem;
+    padding: .8rem 1rem;
+    outline: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: all .2s;
+    
+    
+    &--workout{
+        display: none;
+    }
+    
     &--delete-all{
         display: inline-block;
-        width: max-content;
-        font-family: inherit;
-        font-size: 1.5rem;
         margin: 1rem auto;
-        padding: .8rem 1rem;
-        outline: none;
-        color: white;
         background-color: var.$color-dark--1;
-        cursor: pointer;
-        transition: all .2s;
 
         &:hover{
             background-color: rgba(231, 24, 24, 0.753);
             text-transform: uppercase;
             font-weight: 600;
+        }
+    }
+
+    &--show-all{
+        position: absolute;
+        top: 10px;
+        right: 2%;
+        display: inline-block;
+        border-radius: 3px;
+        background-color: var.$color-dark--1;
+        z-index: 1000;
+
+        &:hover{
+            background-color: rgba(var.$color-dark--2, $alpha: 0.5);
         }
     }
 }
