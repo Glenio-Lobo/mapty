@@ -23,6 +23,7 @@ const selectionInput = document.querySelector('.workout__select');
 const workoutContainer = document.querySelector('.workout');
 const deleteAllBtn = document.querySelector('.btn--delete-all');
 const showAllWorkoutsBtn = document.querySelector('.btn--show-all');
+const sortList = document.querySelector('.sort-box__list');
 
 /** App Class */
 class App{
@@ -47,11 +48,12 @@ class App{
     this.#getPosition();
     this.#getLocalStorage();
 
-    inputForm?.addEventListener('submit', this.#newWorkout.bind(this));
+    inputForm?.addEventListener('submit', this.#getGeocodeLocation.bind(this));
     selectionInput?.addEventListener('change', this.#toggleElevationField);
     workoutContainer?.addEventListener('click', this.#workoutContainerController.bind(this))
     deleteAllBtn?.addEventListener('click', this.#deleteAllWorkouts.bind(this));
     showAllWorkoutsBtn?.addEventListener('click', this.#showAllWorkouts.bind(this));
+    sortList?.addEventListener('click', this.#sortWorkouts.bind(this));
   }
 
   /** 
@@ -84,7 +86,6 @@ class App{
     this.#map = L.map('map').setView([latitude, longitude], 13);
 
     // @ts-ignore
-    // @ts-ignore
     const hotTileLayer = L.tileLayer(
       'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
       {
@@ -108,11 +109,31 @@ class App{
   }
 
   /**
-   * Add a new Workout
+   * Gets the geocoding location of the workout
    * @param {Event} e 
+   */
+  async #getGeocodeLocation(e){
+    e.preventDefault();
+    try{
+      const geoJson = await fetch(`https://geocode.maps.co/reverse?lat=${this.#currentMapEvent.latlng.lat}&lon=${this.#currentMapEvent.latlng.lng}`)
+      const data = await geoJson.json();
+
+      //Renders the workout with the location
+      this.#newWorkout(e, `${data.address.state} in ${data.address.country}`);
+    }catch(err){
+      new Error('Error: Geocoding Error').renderErrorMessage()
+      //Renders the workout without the location
+      this.#newWorkout(e);
+    }
+  }
+
+  /**
+   * Add a new Workout
+   * @param {Event} e
+   * @param {string} [workoutLocation='']
    * @returns {void}
    */
-  #newWorkout(e){
+  #newWorkout(e, workoutLocation=''){
     e.preventDefault();
 
     /* Helper Functions */
@@ -130,6 +151,7 @@ class App{
     // @ts-ignore
     const duration = Number(durationInput.value);
     let workout;
+    
 
     //Running Case
     if(typeInput === 'running'){
@@ -138,7 +160,7 @@ class App{
 
       //Validação das entradas
       if(!isNumberAndPositive(distance, duration, cadence)) return new Error('Input must be a positive number.').renderErrorMessage();
-      workout = new Running(distance, duration, this.#currentMapEvent.latlng, cadence);
+      workout = new Running(distance, duration, this.#currentMapEvent.latlng, cadence, workoutLocation);
     }
     
     //Cycling case
@@ -148,7 +170,7 @@ class App{
 
       //Validação das entradas
       if(!isNumberAndPositive(distance, duration, gain)) return new Error('Input must be a positive number.').renderErrorMessage();
-      workout = new Cycling(distance, duration, this.#currentMapEvent.latlng, gain);
+      workout = new Cycling(distance, duration, this.#currentMapEvent.latlng, gain, workoutLocation);
     }
 
     this.#workouts.push(workout);
@@ -179,7 +201,7 @@ class App{
     const html = `<div class="workout__item workout__card workout__card--${workout.name}" data-id= "${workout.id}">
                       <div class="workout__delete" data-id="${workout.id}">x</div>
                       <h1 class="workout__title">
-                          ${workout.description}
+                          ${workout.description} ${workout.location === '' ? '' : `at ${workout.location}`}
                       </h1>
 
                       <div class="workout__data">
@@ -334,6 +356,32 @@ class App{
 
     this.#markers.addLayer(marker);    
   }
+  /**
+   * Sort the workouts in Descending Order
+   * @param {Event} e 
+   */
+  #sortWorkouts(e){
+    // @ts-ignore
+    if(!e.target.closest('.sort-box__option')) return;
+
+    const sortedWorkouts = [...this.#workouts];
+
+    // @ts-ignore
+    if(e.target.closest('.sort-box__option--distance'))
+      sortedWorkouts.sort( (a,b) =>  a.distance - b.distance);
+
+    // @ts-ignore
+    if(e.target.closest('.sort-box__option--duration'))
+      sortedWorkouts.sort( (a,b) => a.duration - b.duration);
+
+    this.#workouts.forEach( (val, index) => {
+      const workoutToDelete = document.querySelector(`.workout__item[data-id="${val.id}"]`)
+      // @ts-ignore
+      if(workoutToDelete) workoutToDelete.remove();
+    })
+
+    sortedWorkouts.forEach((workout) => this.#renderWorkout(workout));
+  }
 
   /**
    * Shows the creation workout form
@@ -423,8 +471,8 @@ class App{
     // Rebuilding Cycling and Running Objects
     stored.forEach( workout => {
         const workoutGenerated = workout.name === 'running' ? 
-                                new Running(workout.distance, workout.duration, workout.coords, workout.cadence, new Date(workout.date))
-                                : new Cycling(workout.distance, workout.duration, workout.coords, workout.gain, new Date(workout.date));
+                                new Running(workout.distance, workout.duration, workout.coords, workout.cadence, workout.location, new Date(workout.date))
+                                : new Cycling(workout.distance, workout.duration, workout.coords, workout.gain, workout.location, new Date(workout.date));
         this.#workouts.push(workoutGenerated);
         this.#renderWorkout(workoutGenerated);
       }   
@@ -449,9 +497,10 @@ class Workout{
    * @param {number} distance 
    * @param {number} duration 
    * @param {Array<number>} coords Leaflet Object LatLng
-   * @param {Date} [date=new Date()] 
+   * @param {Date} [date=new Date()]
+   * @param {string} location State and country of the workout
    */
-  constructor(distance, duration, coords, date = new Date()){
+  constructor(distance, duration, coords, location, date = new Date()){
     /** 
      * @property {number} id
     */
@@ -464,6 +513,8 @@ class Workout{
     this.duration = duration; // min
     /** @property {LatLng} coords Leaflet LatLng Object */
     this.coords = coords; // [lat, long]
+    /** @property {string} location State and country of the workout*/
+    this.location = location;
   }
 
   /**
@@ -496,10 +547,11 @@ class Running extends Workout{
    * @param {number} duration 
    * @param {Array<number>} coords - Leaflet Object LatLng
    * @param {number} cadence
+   * @param {string} location State and country of the workout
    * @param {Date} [date=new Date()] 
    */
-  constructor(distance, duration, coords, cadence, date=new Date()){
-    super(distance, duration, coords, date);
+  constructor(distance, duration, coords, cadence, location, date=new Date()){
+    super(distance, duration, coords, location, date);
     this.cadence = cadence;
     this.#calcPace();
     this.setDescription();
@@ -529,10 +581,11 @@ class Cycling extends Workout{
    * @param {number} duration 
    * @param {Array<number>} coords - Leaflet Object LatLng
    * @param {number} gain
+   * @param {string} location State and country of the workout
    * @param {Date} [date=new Date()] 
    */
-  constructor(distance, duration, coords, gain, date = new Date()){
-    super(distance, duration, coords, date);
+  constructor(distance, duration, coords, gain, location, date = new Date()){
+    super(distance, duration, coords, location, date);
     this.gain = gain;
     this.#calcSpeed();
     this.setDescription();

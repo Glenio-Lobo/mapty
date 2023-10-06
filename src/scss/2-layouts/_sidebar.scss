@@ -11,14 +11,49 @@
 .logo{
     height: 5.2rem;
     align-self: center;
+    margin-bottom: 3rem;
 }
 
 .workout{
     height: 80%;
-    margin-top: 4rem;
     overflow-y: scroll;
-
+    margin-top: 1rem;
     &::-webkit-scrollbar{
         width: 0;
+    }
+}
+
+.sort-box{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    font-size: 1.5rem;
+
+    &__list{
+        list-style: none;
+        display: flex;
+        align-items: center;
+    }
+
+    &__option{
+        // display: inline-block;
+        cursor: pointer;
+        padding: .5rem 1rem;
+        border-radius: 3px;
+        transition: all .3s;
+
+        &:hover{
+            background-color: var.$color-dark--2;
+        }
+
+        &:last-child{
+            padding-right: 0;
+        }
+    }
+
+    &__option--separation{
+        font-size: 2rem;
+        margin: 0 1rem;
     }
 }
