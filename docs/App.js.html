@@ -1,4 +1,32 @@
-// @ts-check
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: App.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: App.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// @ts-check
 'use strict';
 
 import { Running } from './Running';
@@ -24,7 +52,7 @@ const sortList = document.querySelector('.sort-box__list');
  * App Class 
  * */
 export class App{
-    /** @property {Array<Workout>} workouts Represents all the workouts */
+    /** @property {Array&lt;Workout>} workouts Represents all the workouts */
     #workouts = [];
   
     /** @property {HTMLElement} map Leaflet map */
@@ -88,7 +116,7 @@ export class App{
         'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
         {
           attribution:
-            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles style by <a href="https://www.hotosm.org/" target="_blank">Humanitarian OpenStreetMap Team</a> hosted by <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap France</a>',
+            '&amp;copy; &lt;a href="https://www.openstreetmap.org/copyright">OpenStreetMap&lt;/a> contributors, Tiles style by &lt;a href="https://www.hotosm.org/" target="_blank">Humanitarian OpenStreetMap Team&lt;/a> hosted by &lt;a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap France&lt;/a>',
         }
       ).addTo(this.#map);
   
@@ -114,7 +142,7 @@ export class App{
       e.preventDefault();
       try{
         let workoutLocation = '';
-        const geoJson = await fetch(`https://geocode.maps.co/reverse?lat=${this.#currentMapEvent.latlng.lat}&lon=${this.#currentMapEvent.latlng.lng}`)
+        const geoJson = await fetch(`https://geocode.maps.co/reverse?lat=${this.#currentMapEvent.latlng.lat}&amp;lon=${this.#currentMapEvent.latlng.lng}`)
         const data = await geoJson.json();
         
         //Renders the workout with the location
@@ -143,7 +171,7 @@ export class App{
   
       /* Verify if its a Number and Positive*/
       const isNumberAndPositive = (...arr) =>
-        arr.every(value => Number.isFinite(value) && value > 0);
+        arr.every(value => Number.isFinite(value) &amp;&amp; value > 0);
   
       /* End of Helper Functions */
   
@@ -203,59 +231,59 @@ export class App{
       }
   
       // @ts-ignore
-      const html = `<div class="workout__item workout__card workout__card--${workout.name}" data-id= "${workout.id}">
-                        <div class="workout__delete" data-id="${workout.id}">x</div>
+      const html = `&lt;div class="workout__item workout__card workout__card--${workout.name}" data-id= "${workout.id}">
+                        &lt;div class="workout__delete" data-id="${workout.id}">x&lt;/div>
   
-                        <h1 class="workout__title">
+                        &lt;h1 class="workout__title">
                             ${workout.description} ${workout.location === '' ? '' : `at ${workout.location}`}
-                        </h1>
+                        &lt;/h1>
   
-                        <div class="workout__data">
-                            <div class="workout__info">
-                                <span class="workout__info__icon">🚴‍♀️</span>
-                                <span class="workout__info__value">${workout.distance}</span>
-                                <span class="workout__info__unit">km</span>
-                            </div>
+                        &lt;div class="workout__data">
+                            &lt;div class="workout__info">
+                                &lt;span class="workout__info__icon">🚴‍♀️&lt;/span>
+                                &lt;span class="workout__info__value">${workout.distance}&lt;/span>
+                                &lt;span class="workout__info__unit">km&lt;/span>
+                            &lt;/div>
   
-                            <div class="workout__info">
-                                <span class="workout__info__icon">⏱</span>
-                                <span class="workout__info__value">${workout.duration}</span>
-                                <span class="workout__info__unit">min</span>
-                            </div>
+                            &lt;div class="workout__info">
+                                &lt;span class="workout__info__icon">⏱&lt;/span>
+                                &lt;span class="workout__info__value">${workout.duration}&lt;/span>
+                                &lt;span class="workout__info__unit">min&lt;/span>
+                            &lt;/div>
   
-                            <div class="workout__info">
-                                <span class="workout__info__icon">⚡️</span>
-                                <span class="workout__info__value">
+                            &lt;div class="workout__info">
+                                &lt;span class="workout__info__icon">⚡️&lt;/span>
+                                &lt;span class="workout__info__value">
                                 ${workout.
   // @ts-ignore
                                 name === 'running' ? numberFormater(workout.pace) : numberFormater(workout.speed)}
-                                </span>
-                                <span class="workout__info__unit">
+                                &lt;/span>
+                                &lt;span class="workout__info__unit">
                                 ${workout.
   // @ts-ignore
                                 name === 'running' ? 'MIN/KM' : 'KM/H'}
-                                </span>
-                            </div>
+                                &lt;/span>
+                            &lt;/div>
   
-                            <div class="workout__info">
-                                <span class="workout__info__icon">
+                            &lt;div class="workout__info">
+                                &lt;span class="workout__info__icon">
                                 ${workout.
   // @ts-ignore
                                 name === 'running' ? '🦶🏼' : '⛰'}
-                                </span>
-                                <span class="workout__info__value">
+                                &lt;/span>
+                                &lt;span class="workout__info__value">
                                 ${workout.
   // @ts-ignore
                                 name === 'running' ? workout.cadence : workout.gain}
-                                </span>
-                                <span class="workout__info__unit">
+                                &lt;/span>
+                                &lt;span class="workout__info__unit">
                                 ${workout.
   // @ts-ignore
                                 name === 'running' ? 'SPM' : 'M'}
-                                </span>
-                            </div>
-                        </div>
-                    </div>`;
+                                &lt;/span>
+                            &lt;/div>
+                        &lt;/div>
+                    &lt;/div>`;
       
       // @ts-ignore
       inputForm.insertAdjacentHTML('afterend', html);
@@ -503,3 +531,26 @@ export class App{
     }
 }
 
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="Cycling.html">Cycling</a></li><li><a href="Error.html">Error</a></li><li><a href="Running.html">Running</a></li><li><a href="Workout.html">Workout</a></li></ul><h3>Global</h3><ul><li><a href="global.html#app">app</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Fri Oct 06 2023 21:58:30 GMT-0300 (Horário Padrão de Brasília)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

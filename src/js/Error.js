@@ -2,7 +2,7 @@
 'use strict';
 
 /** Error Class */
-class Error {
+export class Error {
     /**
      * Build a error object
      * @param {string} errorMessage 
@@ -46,4 +46,3 @@ class Error {
     }
 }
 
-export default Error;

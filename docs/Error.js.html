@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: mapty.js</title>
+    <title>JSDoc: Source: Error.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: mapty.js</h1>
+    <h1 class="page-title">Source: Error.js</h1>
 
     
 
@@ -29,17 +29,50 @@
             <pre class="prettyprint source linenums"><code>// @ts-check
 'use strict';
 
-
-import 'core-js/stable';
-import 'regenerator-runtime/runtime';
-import { async } from 'regenerator-runtime';
-import { App } from './App';
-
-//Prettier-Ignore faz com que a formatação automática do prettier ignore a linha seguinte
-// prettier-ignore
-
-/** [See App Class]{@link App} */
-const app = new App();
+/** Error Class */
+export class Error {
+    /**
+     * Build a error object
+     * @param {string} errorMessage 
+     */
+    constructor(errorMessage){
+      this.errorMessage = errorMessage;
+    }
+  
+    /**
+     * Renders error message on the workout container
+     * @param {Element} element Element where the message will be positioned
+     */
+    renderErrorMessage(element){
+  
+      // Se já existir um erro renderizado retorne
+      if(element?.querySelector('.error')) return;
+      
+      // Gera o erro
+      const html = `&lt;div class="error">${this.errorMessage}&lt;/div>`;
+      element?.insertAdjacentHTML('afterbegin', html);
+      const errorElement = element?.querySelector('.error');
+  
+      setTimeout( () => {
+        //@ts-ignore
+        errorElement.style.opacity = 0;
+        //@ts-ignore
+        errorElement.style.visibility = 'hidden';
+      }, 2000);
+  
+      setTimeout( () => {
+        errorElement?.remove();
+      }, 2500);
+    }
+  
+    /**
+     * Sets the error message
+     * @param {string} errorMessage 
+     */
+    setErrorMessage(errorMessage){
+      this.errorMessage = errorMessage;
+    }
+}
 
 </code></pre>
         </article>

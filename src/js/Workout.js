@@ -4,7 +4,7 @@
 import { dataFormater } from "./utils";
 
 /** Workout Class */
-class Workout{
+export class Workout{
   
     /**
      * Creates a new workout object
@@ -40,5 +40,3 @@ class Workout{
                           ${dataFormater(this.date)}`;
     }
 }
-
-export default Workout;

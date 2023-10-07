@@ -1,13 +1,13 @@
 // @ts-check
 'use strict';
 
-import Workout from "./Workout";
+import { Workout } from "./Workout";
 
 /**
  * Running Class
  * @extends Workout
  */
-class Running extends Workout{
+export class Running extends Workout{
     /** @property {string} name Workout name */
     name = 'running';
   
@@ -31,10 +31,8 @@ class Running extends Workout{
      * Calcule workout pace
      * @returns {number}
      */
-    #calcPace(){
-      this.pace = this.duration/this.distance;
-      return this.pace;
-    }
+  #calcPace(){
+    this.pace = this.duration/this.distance;
+    return this.pace;
+  }
 }
-
-export default Running;

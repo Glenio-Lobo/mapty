@@ -4,7 +4,7 @@
   "description": "",
   "default": "index.html",
   "scripts": {
-    "doc": "jsdoc -p -c jsdoc.json",
+    "doc": "jsdoc -c jsdoc.json",
     "start": "parcel index.html",
     "sass": "sass --watch src/scss/mapty.scss:src/css/mapty.css",
     "dev": "npm-run-all --parallel start sass",

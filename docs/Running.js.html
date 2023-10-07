@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: mapty.js</title>
+    <title>JSDoc: Source: Running.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: mapty.js</h1>
+    <h1 class="page-title">Source: Running.js</h1>
 
     
 
@@ -29,18 +29,41 @@
             <pre class="prettyprint source linenums"><code>// @ts-check
 'use strict';
 
+import { Workout } from "./Workout";
 
-import 'core-js/stable';
-import 'regenerator-runtime/runtime';
-import { async } from 'regenerator-runtime';
-import { App } from './App';
-
-//Prettier-Ignore faz com que a formatação automática do prettier ignore a linha seguinte
-// prettier-ignore
-
-/** [See App Class]{@link App} */
-const app = new App();
-
+/**
+ * Running Class
+ * @extends Workout
+ */
+export class Running extends Workout{
+    /** @property {string} name Workout name */
+    name = 'running';
+  
+     /**
+     * Creates a new Running object
+     * @param {number} distance 
+     * @param {number} duration 
+     * @param {Array&lt;number>} coords - Leaflet Object LatLng
+     * @param {number} cadence
+     * @param {string} location State and country of the workout
+     * @param {Date} [date=new Date()] 
+     */
+    constructor(distance, duration, coords, cadence, location, date=new Date()){
+      super(distance, duration, coords, location, date);
+      this.cadence = cadence;
+      this.#calcPace();
+      this.setDescription();
+    }
+  
+    /**
+     * Calcule workout pace
+     * @returns {number}
+     */
+  #calcPace(){
+    this.pace = this.duration/this.distance;
+    return this.pace;
+  }
+}
 </code></pre>
         </article>
     </section>

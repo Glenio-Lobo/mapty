@@ -1,14 +1,13 @@
 // @ts-check
 'use strict';
 
-import Workout from "./Workout";
-
+import { Workout } from "./Workout";
 
 /**
  * Cycling Class
  * @extends Workout
  */
-class Cycling extends Workout{
+export class Cycling extends Workout{
     /** @property {string} name Workout name */
     name = 'cycling';
   
@@ -37,5 +36,3 @@ class Cycling extends Workout{
       return this.speed;
     }
 }
-
-export default Cycling;
